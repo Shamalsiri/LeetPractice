@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class EasyProblems {
@@ -6,10 +7,22 @@ public class EasyProblems {
         EasyProblems problems = new EasyProblems();
 
         // Problem: 3442. Maximum Difference Between Even and Odd Frequency
-        System.out.println("example 1: \"aaaaabbc\": \n" +
+        System.out.println();
+        System.out.println("Problem 3442: Maximum Difference Between Even and Odd Frequency");
+        System.out.println("Example 1: \"aaaaabbc\": \n" +
                 problems.maxDifference("aaaaabbc"));
-        System.out.println("example 2: \"abcabcab\": \n" +
+        System.out.println("Example 2: \"abcabcab\": \n" +
                 problems.maxDifference("abcabcab"));
+
+        //Problem 2: Two Sum
+        System.out.println();
+        System.out.println("Problem 2: Two Sum");
+        int[] p2Ex1 = {2, 7, 11, 15};
+        int[] p2Ex2 = {3,2,4};
+        System.out.println("Example 1: nums = [2,7,11,15], target = 9: \n" +
+                Arrays.toString(problems.twoSum(p2Ex1, 9)));
+        System.out.println("Example 2: nums = [3,2,4], target = 6: \n" +
+                Arrays.toString(problems.twoSum(p2Ex2, 6)));
     }
 
     /**
@@ -59,6 +72,39 @@ public class EasyProblems {
         }
 
         return maxOdd - minEven;
+    }
+
+    /**
+     * <b>Problem: 1: Two Sum</b>
+     * <br><br>
+     * Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+     * You may assume that each input would have exactly one solution, and you may not use the same element twice.
+     * You can return the answer in any order.
+     * <br><br>
+     * <b>Notes</b> <br>
+     * You can use the brute force way of iterating thru the array twice. This would end in a O(n^2) time complexity
+     * <br><br>
+     * Better option would be to create a hashmap with the value as the key and the index as the value. <br>
+     * You would then iterate thru the array once, find the complement by target - arr[i], <br>
+     * then check if it exists in the map and return it; if not add the
+     * current value to the map.<br><br>
+     *
+     * <b>Complexity analysis</b>
+     * Time ComplexitySince Hashmap look ups are O(1) the total time complexity is O(n) (iterate thru the array once to add to the map) <br>
+     * Space Complexity: Creating an hashmap of size of the array makes it: O(n)
+     */
+    public int[] twoSum(int[] nums, int target) {
+        int complement;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            complement = target - nums[i];
+            if(map.containsKey(complement)) {
+                return new int[] {map.get(complement), i};
+            } else {
+                map.put(nums[i], i);
+            }
+        }
+        return new int[] {};
     }
 
 
