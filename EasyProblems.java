@@ -1,6 +1,17 @@
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * For Problem 2: Add Two Numbers
+ */
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
 public class EasyProblems {
 
     public static void main(String[] args){
@@ -14,15 +25,33 @@ public class EasyProblems {
         System.out.println("Example 2: \"abcabcab\": \n" +
                 problems.maxDifference("abcabcab"));
 
-        //Problem 2: Two Sum
+        //Problem 1: Two Sum
         System.out.println();
-        System.out.println("Problem 2: Two Sum");
+        System.out.println("Problem 1: Two Sum");
         int[] p2Ex1 = {2, 7, 11, 15};
         int[] p2Ex2 = {3,2,4};
         System.out.println("Example 1: nums = [2,7,11,15], target = 9: \n" +
                 Arrays.toString(problems.twoSum(p2Ex1, 9)));
         System.out.println("Example 2: nums = [3,2,4], target = 6: \n" +
                 Arrays.toString(problems.twoSum(p2Ex2, 6)));
+
+        //Problem 2: Add Two Numbers
+        System.out.println();
+        System.out.println("Problem 2: Add Two Numbers");
+        ListNode l1 = new ListNode(2, new ListNode(4, new ListNode(3)));
+        ListNode l2 = new ListNode(5, new ListNode(6, new ListNode(4)));
+        ListNode p2 = problems.addTwoNumbers(l1, l2);
+        System.out.println("Example 1: l1 = [ 2 -> 4 -> 3 ] | L2 = [ 5 -> 6 -> 4 ]");
+        System.out.printf("[ ");
+        while (p2 != null) {
+            System.out.printf("" + p2.val);
+            if (p2.next != null) {
+                System.out.printf(" -> ");
+            }
+            p2 = p2.next;
+        }
+        System.out.printf(" ]");
+
     }
 
     /**
@@ -105,6 +134,67 @@ public class EasyProblems {
             }
         }
         return new int[] {};
+    }
+
+
+    /**
+     * <b>Problem 2: Add Two Numbers</b> *takes some thinking in reverse
+     * <br><br>
+     * You are given two non-empty linked lists representing two non-negative integers.
+     * The digits are stored in reverse order, and each of their nodes contains a single digit.
+     * Add the two numbers and return the sum as a linked list.
+     * <br>
+     * You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+     * <br><br>
+     * <b>Example:</b> <br>
+     * Input: l1 = [2,4,3], l2 = [5,6,4]<br>
+     * Output: [7,0,8]<br>
+     * Explanation: 342 + 465 = 807.<br>
+     * <br><br>
+     * <b>Thoughts:</b><br>
+     * Multi digit addition is done back to front with a carry-over value for anything larger than 10. So: <br>
+     *
+     * | 2 , 4 , 3 | <br>
+     * | 5 , 6 , 4 | <br>
+     * -----------<br>
+     * | 7 , 0 , 8 |<br>
+     * carry 1 over from 4 + 6 to the 3 + 4 making it 3 + 4 + 1
+     * <br><br>
+     * <b> Programing Solution:</b><br>
+     * You need a new node while there is values in l1, l2 or if carry is not 0; <br>
+     * Add the carry to the total that is reset. then add l1 val and l2 val before
+     * calculating the digit for the node and carry value.<br>
+     * Return the first node of the dummy list. (keep a separate pointer at the beginning to return). <br>
+     *
+     */
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        int total = 0, carry = 0, num;
+        ListNode dummy = new ListNode();
+        ListNode res = dummy;
+
+        while (l1 != null || l2 != null || carry != 0) {
+            total = total + carry;
+
+            if (l1 != null) {
+                total = total + l1.val;
+                l1 = l1.next;
+            }
+
+            if (l2 != null) {
+                total = total + l2.val;
+                l2 = l2.next;
+            }
+
+            num = total % 10; // calculate the last digit that goes in the node
+            carry = total / 10; // calculate the carry value for the next calculation;
+            total = 0;
+            dummy.next = new ListNode(num);
+            dummy = dummy.next;
+
+        }
+
+        return res.next;
+
     }
 
 
