@@ -50,7 +50,13 @@ public class EasyProblems {
             }
             p2 = p2.next;
         }
-        System.out.printf(" ]");
+        System.out.printf(" ]\n");
+
+        //Problem 3: Longest Substring without repeating characters
+        System.out.println();
+        System.out.println("Problem 3: Longest Substring without repeating characters");
+        problems._3LongestSubstringWithoutRepeats("abcabcbb");
+        problems._3LongestSubstringWithoutRepeats("bbbb");
 
     }
 
@@ -195,6 +201,42 @@ public class EasyProblems {
 
         return res.next;
 
+    }
+
+    /**
+     * <b>Problem 3: Longest Substring without repeating characters</b>
+     * <br><br>
+     * Given a string s, find the length of the longest substring without duplicate characters.
+     * <br><br>
+     * <b>Example 1: </b><br>
+     *  Input: s = "abcabcbb"<br>
+     * Output: 3<br>
+     * Explanation: The answer is "abc", with the length of 3.
+     * <br> <br>
+     *  <b>Example 2:</b><br>
+     *  Input: s = "pwwkew"<br>
+     *  Output: 3<br>
+     *  Explanation: The answer is "wke", with the length of 3.<br>
+     *  Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.<br>
+     */
+    public void _3LongestSubstringWithoutRepeats(String s) {
+        StringBuilder sub = new StringBuilder();
+        int max = 0, count = 0;
+        char temp;
+
+        for (int i = 0; i < s.length(); i++) {
+            temp = s.charAt(i);
+
+            if ( sub.toString().indexOf(temp) != -1 ) {
+                max = Math.max(count, max);
+                count = 0;
+            } else {
+                sub.append(temp);
+                count++;
+            }
+        }
+
+        System.out.println("max : " + max);
     }
 
 
