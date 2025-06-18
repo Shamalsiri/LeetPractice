@@ -55,8 +55,10 @@ public class EasyProblems {
         //Problem 3: Longest Substring without repeating characters
         System.out.println();
         System.out.println("Problem 3: Longest Substring without repeating characters");
-        problems._3LongestSubstringWithoutRepeats("abcabcbb");
-        problems._3LongestSubstringWithoutRepeats("bbbb");
+        int max = problems._3_LongestSubstringWithoutRepeats("abcabcbb");
+        System.out.println("Example 1: string \"abcabcbb\": \n" + max);
+        max = problems._3_LongestSubstringWithoutRepeats("bbbb");
+        System.out.println("Example 1: string \"bbbb\": \n" + max);
 
     }
 
@@ -219,7 +221,7 @@ public class EasyProblems {
      *  Explanation: The answer is "wke", with the length of 3.<br>
      *  Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.<br>
      */
-    public void _3LongestSubstringWithoutRepeats(String s) {
+    public int _3_LongestSubstringWithoutRepeats(String s) {
         StringBuilder sub = new StringBuilder();
         int max = 0, count = 0;
         char temp;
@@ -236,8 +238,10 @@ public class EasyProblems {
             }
         }
 
-        System.out.println("max : " + max);
+        return max;
     }
+
+//    prublic
 
 
 }
