@@ -1,6 +1,11 @@
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Concurrency {
     public static void main(String[] args) {
 
+        System.out.println("Problem 1114: Print in Order: ");
         _1114_PrintInOrder printInOrder = new _1114_PrintInOrder();
 
         Thread threadA = new Thread(() -> {
@@ -36,6 +41,45 @@ public class Concurrency {
             threadA.join();
             threadB.join();
             threadC.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println();
+        _1115_FooBar fooBar = new _1115_FooBar(2);
+
+        Thread A = new Thread(()-> {
+            try {
+                fooBar.foo(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.printf("Foo");
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Thread B = new Thread(()-> {
+            try {
+                fooBar.bar(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.printf("Bar");
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        A.start();
+        B.start();
+
+        try {
+            A.join();
+            B.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -121,5 +165,74 @@ class _1114_PrintInOrder {
 
         // printThird.run () outputs "third". Do not change or remove this line.
         printThird.run();
+    }
+}
+
+/**
+ * <b>Problem 1115: Print FooBar Alternately</b><br><br>
+ * <pre>{@code
+ * class FooBar {
+ *   public void foo() {
+ *     for (int i = 0; i < n; i++) {
+ *       print("foo");
+ *     }
+ *   }
+ *
+ *   public void bar() {
+ *     for (int i = 0; i < n; i++) {
+ *       print("bar");
+ *     }
+ *   }
+ * }
+ * }</pre>
+ *
+ * The same instance of {@code FooBar} will be passed to two different threads: <br>
+ * <ul>
+ *   <li>Thread {@code A} will call {@code foo()}, while</li>
+ *   <li>Thread {@code B} will call {@code bar()}.</li>
+ * </ul>
+ * Modify the given program to output {@code "foobar"} {@code n} times.
+ */
+class _1115_FooBar {
+    private int n;
+    private Lock lock = new ReentrantLock();
+    private Condition condition = lock.newCondition();
+    private boolean fooTurn = true;
+
+    public _1115_FooBar(int n) {
+        this.n = n;
+    }
+
+    public void foo(Runnable printFoo) throws InterruptedException {
+        for (int i = 0; i < n; i++) {
+            try {
+                lock.lock();
+                while (!fooTurn) {
+                    condition.await();
+                }
+                printFoo.run();
+                fooTurn = false;
+                condition.signal();
+            } finally {
+                lock.unlock();
+            }
+        }
+    }
+
+    public void bar(Runnable printBar) throws InterruptedException {
+        Thread.sleep(1000); // Make sure the lock on the firstThread is reached first.
+        for (int i = 0; i < n; i++) {
+            lock.lock();
+            try {
+                while (fooTurn) {
+                    condition.await();
+                }
+                printBar.run();
+                fooTurn = true;
+                condition.signal();
+            } finally {
+                lock.unlock();
+            }
+        }
     }
 }
