@@ -12,10 +12,10 @@ class ListNode {
     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
 }
 
-public class EasyProblems {
+public class Problems {
 
     public static void main(String[] args){
-        EasyProblems problems = new EasyProblems();
+        Problems problems = new Problems();
 
         // Problem: 3442. Maximum Difference Between Even and Odd Frequency
         System.out.println();
@@ -59,6 +59,18 @@ public class EasyProblems {
         System.out.println("Example 1: string \"abcabcbb\": \n" + max);
         max = problems._3_LongestSubstringWithoutRepeats("bbbb");
         System.out.println("Example 1: string \"bbbb\": \n" + max);
+
+        //Problem 4: Median Sorted Arrays
+        System.out.println();
+        System.out.println("Problem 4: Median Sorted Arrays ");
+        int[] num1 = {1,3};
+        int[] num2 = {2};
+        double res = problems._4_findMedianSortedArray(num1, num2);
+        System.out.println("Example 1: nums1 = [1,3] | num2 = [2]: \n" + res);
+        num1 = new int[] {1, 2};
+        num2 = new int[] {3, 4};
+        res = problems._4_findMedianSortedArray(num1, num2);
+        System.out.println("Example 2: nums1 = [1,2] | num2 = [3,4]: \n" + res);
 
     }
 
@@ -241,7 +253,78 @@ public class EasyProblems {
         return max;
     }
 
-//    prublic
+    /**
+     * <b>Problem 4: Median of Two Sorted Arrays</b>
+     * <br><br>
+     * Given two sorted arrays {@code nums1} and {@code nums2} of size {@code m} and {@code n} respectively,<br>
+     * return the <b>median</b> of the two sorted arrays.
+     * <br>
+     * The overall run time complexity should be {@code O(log (m+n))}.
+     * <br><br>
+     * <b>Example 1:</b><br>
+     * Input: nums1 = [1,3], nums2 = [2]<br>
+     * Output: 2.00000<br>
+     * Explanation: merged array = [1,2,3] and median is 2.
+     * <br><br>
+     * <b>Example 2:</b><br>
+     * Input: nums1 = [1,2], nums2 = [3,4]<br>
+     * Output: 2.50000<br>
+     * Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
+     * <br><br>
+     * <b>Notes:</b><br>
+     * On an {@code ODD} list of numbers Median is the middle value so {@code (m + n) / 2}; <br>
+     * however to get the index its {@code (m + n + 1) / 2} <br>
+     * For an {@code EVEN} list; you need to find the middle value the the value before it and average them.<br>
+     * Therefore you repeat parsing thru the arrays {@code ((m + n) / 2) + 1} times and average the last two values
+     * <br><br>
+     * <b>Complexity Analysis</b><br>
+     * m = size of num1 | n = size of num2 <br><br>
+     * <b>Time Complexity: </b> <i>O(m+n)</i><br>
+     * We get the smallest element by comparing two values at p1 and p2,<br>
+     * it takes O(1) to compare two elements and move the corresponding pointer to the right.<br>
+     * We need to traverse half of the arrays before reaching the median element(s).<br>
+     * <br>
+     * <b>Space Complexity:</b> <i>O(1)</i><br>
+     * We only maintained 2 variable/pointers.
+     *
+     */
+    public double _4_findMedianSortedArray(int[] nums1, int[] nums2) {
+        int total = nums1.length + nums2.length;
+        boolean evenTotal = total % 2 == 0;
+        double ret = 0.0;
+
+        int reps;
+        if (evenTotal) {
+            reps = (total / 2) + 1;
+        } else {
+            reps = (total + 1) / 2;
+        }
+
+        int a = 0, b = 0;
+        int curr = 0;
+        for (int i = 0; i < reps; i++) {
+
+            if (a < nums1.length && nums1[a] < nums2[b]) {
+                curr = nums1[a];
+                a++;
+            } else {
+                curr = nums2[b];
+                b++;
+            }
+
+            if (evenTotal && i == reps - 2) {
+                ret += curr;
+            }
+        }
+
+        if (evenTotal) {
+           return (ret + curr) / 2;
+        } else {
+            return curr;
+        }
+
+    }
+
 
 
 }
