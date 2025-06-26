@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * For Problem 2: Add Two Numbers
@@ -21,9 +23,9 @@ public class Problems {
         System.out.println();
         System.out.println("Problem 3442: Maximum Difference Between Even and Odd Frequency");
         System.out.println("Example 1: \"aaaaabbc\": \n" +
-                problems.maxDifference("aaaaabbc"));
+                problems._1_maxDifference("aaaaabbc"));
         System.out.println("Example 2: \"abcabcab\": \n" +
-                problems.maxDifference("abcabcab"));
+                problems._1_maxDifference("abcabcab"));
 
         //Problem 1: Two Sum
         System.out.println();
@@ -31,9 +33,9 @@ public class Problems {
         int[] p2Ex1 = {2, 7, 11, 15};
         int[] p2Ex2 = {3,2,4};
         System.out.println("Example 1: nums = [2,7,11,15], target = 9: \n" +
-                Arrays.toString(problems.twoSum(p2Ex1, 9)));
+                Arrays.toString(problems._2_twoSum(p2Ex1, 9)));
         System.out.println("Example 2: nums = [3,2,4], target = 6: \n" +
-                Arrays.toString(problems.twoSum(p2Ex2, 6)));
+                Arrays.toString(problems._2_twoSum(p2Ex2, 6)));
 
         //Problem 2: Add Two Numbers
         System.out.println();
@@ -72,6 +74,26 @@ public class Problems {
         res = problems._4_findMedianSortedArray(num1, num2);
         System.out.println("Example 2: nums1 = [1,2] | num2 = [3,4]: \n" + res);
 
+        //Problem 5: Longest Palindrome
+        System.out.println();
+        System.out.println("Problem 5: Longest Palindrome");
+        String str = "babad";
+        System.out.println("Example 1: str = \"" + str + "\": \n" +
+        problems._5_LongestPalindrome(str));
+        str = "cbbd";
+        System.out.println("Example 2: str = \"" + str + "\": \n" +
+                problems._5_LongestPalindrome(str));
+
+        //Problem 6; ZigZag Conversion
+        System.out.println();
+        System.out.println("Problem 6; ZigZag Conversion");
+        str = "PAYPALISHIRING";
+        System.out.println("Example 1: str: " + str + " | numRows = 4:\n" +
+                problems._6_ZigZagConversion(str, 3));
+        str = "PAYPALISHIRING";
+        System.out.println("Example 2: str: " + str + " | numRows = 3:\n" +
+                problems._6_ZigZagConversion(str, 4));
+
     }
 
     /**
@@ -102,7 +124,7 @@ public class Problems {
      * - Time Complexity: O(n). <br>
      * - Space Complexity: O(∣Σ∣).
      */
-    public int maxDifference(String s) {
+    public int _1_maxDifference(String s) {
         HashMap<Character, Integer> charFreq = new HashMap<Character, Integer>();
 
         for(char ch: s.toCharArray()) { //convert string to an array of chars
@@ -142,7 +164,7 @@ public class Problems {
      * Time ComplexitySince Hashmap look ups are O(1) the total time complexity is O(n) (iterate thru the array once to add to the map) <br>
      * Space Complexity: Creating an hashmap of size of the array makes it: O(n)
      */
-    public int[] twoSum(int[] nums, int target) {
+    public int[] _2_twoSum(int[] nums, int target) {
         int complement;
         HashMap<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
@@ -155,7 +177,6 @@ public class Problems {
         }
         return new int[] {};
     }
-
 
     /**
      * <b>Problem 2: Add Two Numbers</b> *takes some thinking in reverse
@@ -325,6 +346,129 @@ public class Problems {
 
     }
 
+    /**
+     * <b>Problem 5: Longest Palindromic Substring</b>
+     * <br><br>
+     * Given a string {@code s}, return the longest palindromic substring in {@code s}.
+     * <br><br>
+     * <b>Example 1</b><br>
+     * Input: s = "babad"<br>
+     * Output: "bab"<br>
+     * Explanation: "aba" is also a valid answer.
+     * <br><br>
+     * <b>Example 2</b><br>
+     * Input: s = "cbbd"<br>
+     * Output: "bb"<br>
+     */
+    public String _5_LongestPalindrome(String s) {
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
+        int[] ans = new int[] {0, 0};
 
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = true;
+        }
+
+        for (int i = 0; i < n - 1; i++) {
+            if (s.charAt(i) == s.charAt(i + 1)) {
+                dp[i][i+1] = true;
+                ans[0] = i;
+                ans[1] = 1 + i;
+            }
+        }
+
+        for (int diff = 2; diff < n; diff++) {
+            for (int i = 0; i < n - diff; i++) {
+                int j = i + diff;
+                if (s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1]) {
+                    dp[i][j] = true;
+                    ans[0] = i;
+                    ans[1] = j;
+                }
+            }
+        }
+
+        int i = ans[0];
+        int j = ans[1];
+        return s.substring(i, j + 1);
+    }
+
+    /**
+     * <b>Problem 6: Zigzag Conversion</b>
+     * <br><br>
+     * Converts the given string into a zigzag pattern based on the specified number of rows,
+     * and then reads the characters line by line to produce the final output string.
+     *
+     * <p>The zigzag pattern writes characters in a down-and-up fashion across the rows. For example,
+     * given the input string {@code "PAYPALISHIRING"} and {@code numRows = 3}, the zigzag pattern is:
+     *
+     * <pre>
+     * P   A   H   N
+     * A P L S I I G
+     * Y   I   R
+     * </pre>
+     *
+     * Reading line by line gives the output: "PAHNAPLSIIGYIR".
+     *
+     * <p>This method performs that transformation and returns the converted string.
+     *
+     * <p><b>Example:</b>
+     * <pre>
+     * Input: s = "PAYPALISHIRING", numRows = 3
+     * Output: "PAHNAPLSIIGYIR"
+     * </pre>
+     * <br>
+     * <u><b>Notes</b></u><br>
+     * <p>once you see it visually, you realise that you could make a 2d structure to store the chars.
+     * For me, I went with a Hashmap that represented the row as a list of chars.<br>
+     * So as I iterate through each character in the {@code str}, I'd keep a {@code boolean reverse} and an {@code int key} which represent the column.
+     * I'd flip the reverse boolean when key is numRows and when key is 1.
+     * Increment or decrement the key depending on the reverse boolean.
+     * </p>
+     * <br>
+     * <u><b>Time and Space Complexity</b></u><br>
+     * <i>Time Complexity:</i><br>
+     * O(n) to go through str and O(n) to build the return string so <b>Time Complexity: O(n)</b>
+     * <br><br>
+     * <i>Space Complexity:</i><br>
+     * Most about of values stored in the hashmap is n <- length of str<br>
+     * hence; <b>Space Complexity: O(n)</b>
+     */
+
+    public String _6_ZigZagConversion(String str, int numRows) {
+        HashMap<Integer, List<Character>> map = new HashMap<>();
+        List<Character> temp;
+        boolean reverse = false;
+        int key  = 1;
+
+        for (int i = 0; i < str.length(); i++) {
+            temp = map.get(key);
+            if (temp == null)
+                temp = new ArrayList<>();
+            temp.add(str.charAt(i));
+            map.put(key, temp);
+
+            if (key == numRows)
+                reverse = true;
+            else if (key == 1)
+                reverse = false;
+
+            if (reverse)
+                key--;
+            else
+                key++;
+
+        }
+
+        StringBuilder ret = new StringBuilder();
+        for (int i = 0; i < numRows; i++) {
+           List<Character> chars = map.get(i + 1);
+           for (char c: chars ) {
+               ret.append(c);
+           }
+        }
+
+        return ret.toString();
+    }
 
 }
