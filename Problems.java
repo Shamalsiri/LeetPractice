@@ -441,6 +441,7 @@ public class Problems {
         boolean reverse = false;
         int key  = 1;
 
+        // TC: O(n) Space: O(n)
         for (int i = 0; i < str.length(); i++) {
             temp = map.get(key);
             if (temp == null)
@@ -449,9 +450,9 @@ public class Problems {
             map.put(key, temp);
 
             if (key == numRows)
-                reverse = true;
+                reverse = true; // reverse the key count
             else if (key == 1)
-                reverse = false;
+                reverse = false; // key count going forward
 
             if (reverse)
                 key--;
@@ -460,6 +461,7 @@ public class Problems {
 
         }
 
+        // TC: O(n)
         StringBuilder ret = new StringBuilder();
         for (int i = 0; i < numRows; i++) {
            List<Character> chars = map.get(i + 1);
