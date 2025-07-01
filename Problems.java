@@ -68,7 +68,7 @@ public class Problems {
         int[] num1 = {1,3};
         int[] num2 = {2};
         double res = problems._4_findMedianSortedArray(num1, num2);
-        System.out.println("Example 1: nums1 = [1,3] | num2 = [2]: \n" + res);
+        System.out.println("EXxample 1: nums1 = [1,3] | num2 = [2]: \n" + res);
         num1 = new int[] {1, 2};
         num2 = new int[] {3, 4};
         res = problems._4_findMedianSortedArray(num1, num2);
@@ -84,15 +84,23 @@ public class Problems {
         System.out.println("Example 2: str = \"" + str + "\": \n" +
                 problems._5_LongestPalindrome(str));
 
-        //Problem 6; ZigZag Conversion
+        //Problem 6: ZigZag Conversion
         System.out.println();
-        System.out.println("Problem 6; ZigZag Conversion");
+        System.out.println("Problem 6: ZigZag Conversion");
         str = "PAYPALISHIRING";
         System.out.println("Example 1: str: " + str + " | numRows = 4:\n" +
                 problems._6_ZigZagConversion(str, 3));
         str = "PAYPALISHIRING";
         System.out.println("Example 2: str: " + str + " | numRows = 3:\n" +
                 problems._6_ZigZagConversion(str, 4));
+
+        //Problem 7: Reverse x
+        System.out.println();
+        System.out.println("Problem 7: Reverse x");
+        int x  = -120;
+        System.out.println("Example 1: x: " + x + "\n" +problems.reverse(x));
+        x  = 1534236469;
+        System.out.println("Example 2: x: " + x + "\n" +problems.reverse(x));
 
     }
 
@@ -471,6 +479,47 @@ public class Problems {
         }
 
         return ret.toString();
+    }
+
+    /**
+     * <b>Problem 7: Reverse Integer</b>\
+     * <br><br>
+     * <p>Given a signed 32-bit integer {@code x}, return {@code x} with its digits reversed.
+     * If reversing {@code x} causes the value to go outside the signed 32-bit integer range [-2 <sup>31</sup>, 2<sup>31</sup> - 1], then return {@code 0}.
+     * <br><br>
+     * Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
+     * <br><br>
+     * <b><u>Notes</u></b><br>
+     * The return value needs to be stored as a long so that the bits don't overflow while assigning the reverse value<br>
+     * Storing the value as long will maintain the integrity of the value until the final check for in range is done; giving the correct answer
+     * <br><br>
+     * <b><u>Time & Space Complexity</u></b><br>
+     * <i>Time Complexity:</i> {@code O(log x)} aka number of digits in integer {@code x}<br>
+     * <i>Space Complexity:</i> {@code O(1)}
+     */
+    public int reverse(int x) {
+        long ret = 0; // if this is int instead of long
+        boolean neg = false;
+
+        if (x < 0) {
+            neg = true;
+            x = x * -1;
+        }
+
+        while (x > 0) {
+            ret = (ret * 10) + (x % 10); // then during this calculation the overflow can already happen silently
+            x = x / 10;
+        }
+
+        if (neg) {
+            ret = -ret;
+        }
+
+        if (ret < -Math.pow(2,31) || ret > Math.pow(2, 31) - 1) { // so this check fails everytime
+            return 0;
+        }
+
+        return (int) ret;
     }
 
 }
