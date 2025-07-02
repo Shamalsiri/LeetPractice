@@ -96,11 +96,27 @@ public class Problems {
 
         //Problem 7: Reverse x
         System.out.println();
-        System.out.println("Problem 7: Reverse x");
+        System.out.println("Problem 7: Reverse Integer");
         int x  = -120;
         System.out.println("Example 1: x: " + x + "\n" +problems._7_reverseInteger(x));
         x  = 1534236469;
         System.out.println("Example 2: x: " + x + "\n" +problems._7_reverseInteger(x));
+
+        //Problem 8: String to Integer aka myAtoi
+        System.out.println();
+        System.out.println("Problem 8: String to Integer aka myAtoi");
+        str = "42";
+        System.out.println("Example 1: str: " + str + "\n"
+                + problems._8_myAtoi(str));
+        str = "  -042";
+        System.out.println("Example 2: str: " + str + "\n"
+                + problems._8_myAtoi(str));
+        str = "1234df03";
+        System.out.println("Example 3: str: " + str + "\n"
+                + problems._8_myAtoi(str));
+        str = "+-12";
+        System.out.println("Example 4: str: " + str + "\n"
+                + problems._8_myAtoi(str));
 
     }
 
@@ -522,4 +538,92 @@ public class Problems {
         return (int) ret;
     }
 
+    /**
+     * <b>Problem 8: String to Integer (atoi)</b>
+     * <br><br>
+     * Implements the {@code myAtoi(String s)} function that converts a given string into a 32-bit signed integer,
+     * following the rules defined by the C/C++ {@code atoi} function.
+     * <br><br>
+     * <b><u>Algorithm Overview:</u></b><br>
+     * <ul>
+     *   <li>Ignore leading whitespace characters.</li>
+     *   <li>Check for an optional '+' or '-' sign. Default is positive.</li>
+     *   <li>Convert consecutive numeric characters into an integer.</li>
+     *   <li>Stop parsing upon encountering a non-digit character.</li>
+     *   <li>If the number exceeds 32-bit signed integer range [{@code -2^31}, {@code 2^31 - 1}], clamp to the nearest bound.</li>
+     * </ul>
+     * Parsing stops at the first invalid character after any optional whitespace and sign.
+     * <br><br>
+     * The value is parsed using a {@code long} to safely detect overflow before casting to {@code int}.
+     * The 32-bit integer bounds are calculated via {@code Math.pow()} to avoid hardcoding or using constants.
+     * <br><br>
+     * <b><u>Examples:</u></b><br>
+     * <ul>
+     *   <li>{@code myAtoi("42")} → {@code 42}</li>
+     *   <li>{@code myAtoi("   -042")} → {@code -42}</li>
+     *   <li>{@code myAtoi("1337c0d3")} → {@code 1337}</li>
+     *   <li>{@code myAtoi("0-1")} → {@code 0}</li>
+     *   <li>{@code myAtoi("words and 987")} → {@code 0}</li>
+     *   <li>{@code myAtoi("-91283472332")} → {@code -2147483648} (clamped)</li>
+     * </ul>
+     * <br>
+     * <b><u>Time & Space Complexity:</u></b><br>
+     * <i>Time Complexity:</i> {@code O(n)}, where {@code n} is the length of the input string<br>
+     * <i>Space Complexity:</i> {@code O(1)} – constant space used for flags and accumulator
+     *
+     * @param s the input string to be converted to an integer
+     * @return the parsed 32-bit signed integer, clamped to the range {@code [-2^31, 2^31 - 1]}
+     */
+
+    public int _8_myAtoi(String s) {
+        boolean positive = true;
+        boolean signAssigned = false;
+        boolean digitsStarted = false;
+        long ret = 0;
+
+        // Do the math early so it's not done inside the loop
+        double INT_MAX = Math.pow(2,31) -1;
+        double INT_MIN = -Math.pow(2, 31);
+
+        for (char c: s.toCharArray()) {
+            if (c == ' ') {
+                if (digitsStarted || signAssigned) break;
+
+            } else
+            if (c == '+') {
+                if (digitsStarted || signAssigned) break;
+                signAssigned = true;
+                positive = true;
+
+            } else
+            if (c == '-') {
+                if (digitsStarted || signAssigned) break;
+                signAssigned = true;
+                positive = false;
+
+            } else
+            if ('0' <= c && c <= '9') {
+                digitsStarted = true;
+                ret = (ret * 10) + (c - '0');
+
+                //Strings can be too long so got to do the bound checks during conversion or else might overflow
+                if (!positive && -ret < INT_MIN) return (int) INT_MIN ;
+                if (positive &&   ret > INT_MAX) return (int) INT_MAX ;
+
+            } else {
+                break;
+            }
+        }
+
+        if (!positive) ret = -ret;
+
+        // redundant but better safe than sorry.
+        if (ret < INT_MIN) return (int) INT_MIN ;
+        if (ret > INT_MAX) return (int) INT_MAX ;
+
+        // Going through the string once so time complexity should be O(n)
+        // space complexity = O(1) // since we are just storing a few values
+
+        return (int) ret;
+    }
 }
