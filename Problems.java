@@ -98,9 +98,9 @@ public class Problems {
         System.out.println();
         System.out.println("Problem 7: Reverse x");
         int x  = -120;
-        System.out.println("Example 1: x: " + x + "\n" +problems.reverse(x));
+        System.out.println("Example 1: x: " + x + "\n" +problems._7_reverseInteger(x));
         x  = 1534236469;
-        System.out.println("Example 2: x: " + x + "\n" +problems.reverse(x));
+        System.out.println("Example 2: x: " + x + "\n" +problems._7_reverseInteger(x));
 
     }
 
@@ -497,7 +497,7 @@ public class Problems {
      * <i>Time Complexity:</i> {@code O(log x)} aka number of digits in integer {@code x}<br>
      * <i>Space Complexity:</i> {@code O(1)}
      */
-    public int reverse(int x) {
+    public int _7_reverseInteger(int x) {
         long ret = 0; // if this is int instead of long
         boolean neg = false;
 
