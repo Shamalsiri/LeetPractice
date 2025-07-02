@@ -458,7 +458,6 @@ public class Problems {
      * Most about of values stored in the hashmap is n <- length of str<br>
      * hence; <b>Space Complexity: O(n)</b>
      */
-
     public String _6_ZigZagConversion(String str, int numRows) {
         HashMap<Integer, List<Character>> map = new HashMap<>();
         List<Character> temp;
