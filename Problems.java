@@ -574,7 +574,6 @@ public class Problems {
      * @param s the input string to be converted to an integer
      * @return the parsed 32-bit signed integer, clamped to the range {@code [-2^31, 2^31 - 1]}
      */
-
     public int _8_myAtoi(String s) {
         boolean positive = true;
         boolean signAssigned = false;
