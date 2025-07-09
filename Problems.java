@@ -118,6 +118,11 @@ public class Problems {
         System.out.println("Example 4: str: " + str + "\n"
                 + problems._8_myAtoi(str));
 
+        //Problem 8: String to Integer (ATOI)
+
+        //Problem 9: isPalindrome
+        System.out.println("" + problems._9_isPalindrome(1000021));
+
     }
 
     /**
@@ -623,5 +628,25 @@ public class Problems {
         // space complexity = O(1) // since we are just storing a few values
 
         return (int) ret;
+    }
+
+    /**
+     * <b>Problem 9: Palindrome Number</b>
+     * <br><br>
+     * Given an integer {@code x}, return {@code true} if {@code x} is a <i>palindrome</i>, and {@code false} otherwise.
+     */
+    public boolean _9_isPalindrome(int x) {
+        if (x < 0 || x % 10 == 0 && x !=0 ) return false;
+
+        int reversed = 0;
+
+        while(x > reversed) {
+            // Start adding digits from the back to a new value until the halfway point is crossed
+            reversed = reversed * 10 + x % 10;
+            x = x / 10;
+        }
+
+        return x == reversed ||         //even digits
+                x == reversed / 10;     //odd digits
     }
 }
